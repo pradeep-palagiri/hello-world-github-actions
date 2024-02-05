@@ -18,7 +18,6 @@ jobs:
         with:
           python-version: 3.8
 
-
       - name: Deploy to staging
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
