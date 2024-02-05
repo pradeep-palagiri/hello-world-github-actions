@@ -40,6 +40,6 @@ jobs:
               pull_number: context.issue.number,
               event: 'APPROVE'
             });
-            core.setOutput('approved', true);
+            core.setOutput('approved', false);
         env:
           GITHUB_TOKEN: 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
