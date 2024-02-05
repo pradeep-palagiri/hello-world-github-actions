@@ -42,3 +42,37 @@ jobs:
             core.setOutput('approved', false);
         env:
           GITHUB_TOKEN: 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
+
+approval:
+    runs-on: ubuntu-latest
+    needs: deploy_to_stage
+    steps:
+    - name: Request Approval
+      uses: actions/github-script@v5
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const { data: pullRequest } = await github.pulls.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.payload.pull_request.number
+          });
+          await github.pulls.requestReviewers({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.payload.pull_request.number,
+            reviewers: ['reviewer_username']
+          });
+
+  deploy_to_prod:
+    runs-on: ubuntu-latest
+    needs: approval
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Deploy to Prod
+      run: |
+        # Add your deployment script/command here
+        echo "Deploying to Production environment"
+        # Replace this with your actual deployment command
